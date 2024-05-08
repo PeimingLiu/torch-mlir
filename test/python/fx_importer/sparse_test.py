@@ -379,6 +379,13 @@ def test_sparse_SpMM():
 # CHECK:                              [-63., -64.]{{\]}}), size=(8, 4, 2), nnz=32,
 # CHECK:                              layout=torch.sparse_csr)
 # CHECK: torch.mlir
+# CHECK:   tensor(crow_indices=tensor([ 0,  4,  8, 12, 16, 20, 24, 28, 32]),
+# CHECK:          col_indices=tensor([0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1,
+# CHECK:                              2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]),
+# CHECK:          values=tensor({{\[}}[ -1.,  -2.],
+#                                     ...
+# CHECK:                              [-63., -64.]{{\]}}), size=(8, 4, 2), nnz=32,
+# CHECK:                              layout=torch.sparse_csr)
 # CHECK: torch.mlir.batch
 #
 def test_sparse_eltwise():
@@ -406,12 +413,13 @@ def test_sparse_eltwise():
 
     # Run it with PyTorch torch.sparse and with TORCH-MLIR sparse_jit.
     res1 = net(sparse_input)
+    res2 = sparse_jit(net, sparse_input)
     # TODO: make these work
-    # res2 = sparse_jit(net, sparse_input)
     # res3 = sparse_jit(net, batch_input)
     print("torch.sparse")
     print(res1)
     print("torch.mlir")
+    print(res2)
     print("torch.mlir.batch")
 
 
